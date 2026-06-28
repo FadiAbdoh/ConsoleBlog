@@ -1,0 +1,16 @@
+
+.img {
+    animation: jump 2s infinite ease alternate;
+}
+
+@keyframes jump {
+    from {
+        transform: translateY(-20px)
+    } to {
+        transform: translateY(0px) scale(1.03);
+    }
+}
+
+::placeholder {
+    text-transform: capitalize;
+}

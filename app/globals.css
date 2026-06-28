@@ -2,8 +2,15 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111;
+
 }
+
+.theme.dark {
+  --background: #111111;
+  --foreground: #dddddd;
+}
+
 
 @theme inline {
   --color-background: var(--background);
@@ -12,15 +19,40 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.theme {
+  background-color: var(--background);
+  color: var(--foreground);
+  min-height: 100vh; 
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* تغيير لون التحديد لجميع عناصر الموقع */
+::selection {
+  background-color: #53c28b;
+  color: white;
+}
+
+/* لدعم متصفحات فيرفوكس القديمة */
+::-moz-selection {
+  background-color: #53c28b;
+  color: white;
+}
+
+
+
+input::placeholder,
+textarea::placeholder {
+  color: #71717a !important; 
+  opacity: 1 !important;     
+}
+
+.theme.dark input::placeholder,
+.theme.dark textarea::placeholder {
+  color: #9ca3af !important;
+  opacity: 1 !important;     
 }

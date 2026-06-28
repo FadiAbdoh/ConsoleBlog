@@ -1,0 +1,24 @@
+
+@media (max-width: 991px) {
+    .container {
+        padding: 0 30px;
+    }
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding: 0 10px;
+    }
+}
+
+#img {
+    animation: jump 2s infinite ease alternate;
+}
+
+@keyframes jump {
+    from {
+        transform: translateY(-10px)
+    } to {
+        transform: translateY(10px);
+    }
+}
