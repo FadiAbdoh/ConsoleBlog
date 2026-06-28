@@ -4,11 +4,11 @@ import Post from "@/models/Post";
 
 export const GET = async (
     request: Request,
-    { params }: { params: {id: string} }
+    { params }: { params: Promise<{ id: string }> }
 ) => {
-    const { id } = await params
     
     try {
+        const { id } = await params
         // الاتصال بقاعدة البيانات
         await connect();
         // جلب كل المقالات الموجودة في جدول Posts
