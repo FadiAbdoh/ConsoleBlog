@@ -22,9 +22,7 @@ type StatusType = {
     message: string
 }
 
-export default function LoginPage() {
-
-    
+function LoginContent() {
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);    
     const router = useRouter()
@@ -33,8 +31,6 @@ export default function LoginPage() {
     const [status, setStatus] = useState<StatusType | null>(
         msg ? { type: "success", message: msg } : null
     )
-
-
 
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -57,11 +53,8 @@ export default function LoginPage() {
             }, 1500);
         }
     }
-
-
     return (
-        <Suspense fallback={<div className="text-center mt-10">Loading...</div>}>
-            <div className="flex min-h-[75vh] flex-col items-center justify-center md:p-4">
+        <div className="flex min-h-[75vh] flex-col items-center justify-center md:p-4">
                 <div className="w-full max-w-md rounded-xl border border-gray-200 dark:border-zinc-800 bg-background p-5 md:p-8 shadow-md">
                     <h1 className="text-3xl font-bold text-center mb-1">Welcome Back</h1>
                     <h2 className="text-sm text-center text-gray-500 dark:text-gray-400 mb-6">
@@ -162,8 +155,13 @@ export default function LoginPage() {
                         </Link>
                     </div>
                 </div>
-            </div>
-        </Suspense>
+        </div>
     )
+}
+
+export default function LoginPage() {
+    <Suspense fallback={<div className="text-center mt-10">Loading...</div>}>
+        <LoginContent />
+    </Suspense>
 }
 
