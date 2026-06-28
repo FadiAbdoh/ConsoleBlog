@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import styles from './page.module.css'
 import TextField from "@mui/material/TextField";
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import FormControl from "@mui/material/FormControl";
 import Alert from "@mui/material/Alert";
 import InputLabel from "@mui/material/InputLabel";

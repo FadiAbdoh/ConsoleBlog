@@ -1,8 +1,6 @@
 "use client"
 
 import { signIn } from 'next-auth/react'
-import styles from './page.module.css'
-import GitHubIcon from '@mui/icons-material/GitHub';
 import Link from 'next/link';
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
@@ -13,7 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 // type StatusType = 'error' | 'success'
@@ -22,15 +20,11 @@ type StatusType = {
     message: string
 }
 
-function LoginContent() {
+export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);    
     const router = useRouter()
-    const searchParams = useSearchParams();
-    const msg = searchParams.get("success");
-    const [status, setStatus] = useState<StatusType | null>(
-        msg ? { type: "success", message: msg } : null
-    )
+    const [status, setStatus] = useState<StatusType | null>(null)
 
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -157,11 +151,5 @@ function LoginContent() {
                 </div>
         </div>
     )
-}
-
-export default function LoginPage() {
-    <Suspense fallback={<div className="text-center mt-10">Loading...</div>}>
-        <LoginContent />
-    </Suspense>
 }
 
