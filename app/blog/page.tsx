@@ -6,11 +6,11 @@ import Link from 'next/link'
 import connect from "@/app/utils/db" // 👈 استيراد دالة الاتصال مباشرة
 import Post from "@/models/Post"       // 👈 استيراد الموديل مباشرة
 
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
     title: 'Articles & Tutorials | ConsoleBlog',
     description: "Read our latest articles, guides, and tutorials about React, Next.js, TypeScript, and modern web development technologies.",
 };
-
 
 type PostType = {
     _id: string,
@@ -22,10 +22,8 @@ type PostType = {
 }
 
 export default async function BlogPage() {
-    
-    
     await connect();
-    const data: PostType[] = await Post.find(); // جلب كل البوستات
+    const data: PostType[] = await Post.find();
 
     return (
         <div className='flex flex-col my-[30px] gap-[50px]'>
