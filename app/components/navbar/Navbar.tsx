@@ -8,6 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { signOut, useSession } from "next-auth/react";
 
 
 const links = [
@@ -43,9 +44,34 @@ const links = [
     },
 ]
 
+interface AuthButtonProps {
+    label: string;
+    onClick?: () => void | Promise<void>;
+    className?: string; 
+}
+
+function AuthButton({ 
+    label, 
+    onClick, 
+    className = 'p-[5px] bg-[#2e8b57] text-white cursor-pointer rounded-[5px] py-1 px-2 hover:bg-[#3ea876] transition-colors duration-300' 
+}: AuthButtonProps) {
+    return (
+        <button 
+            aria-label={`${label} from ConsoleBlog`}
+            onClick={onClick}
+            className={className}
+        >
+            {label}
+        </button>
+    )
+}
+
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
     const navRef = useRef<HTMLDivElement>(null);
+    const session = useSession()
+
+    
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -75,13 +101,19 @@ export default function Navbar() {
                         {l.title}
                     </Link>
                 ))}
-                <button 
-                    aria-label="Log out from ConsoleBlog"
-                    onClick={() => {console.log('Logged Out')}}
-                    className='p-[5px] bg-[#2e8b57] text-white cursor-pointer rounded-[5px] py-1 px-2 hover:bg-[#3ea876] transition-colors duration-300'
-                >
-                    Logout
-                </button>
+                {session.status === 'authenticated' ?
+                    (
+                        <AuthButton 
+                            label="Logout"
+                            onClick={async () => await signOut({ callbackUrl: "/dashboard/login" })}
+                        />
+                    )
+                    : (
+                        <Link href='/dashboard/login'>
+                            <AuthButton label="Login"/>
+                        </Link>
+                    )
+                }
             </div>
             <div className="flex md:hidden items-center gap-4">
                 <ThemeToggle />
@@ -114,13 +146,23 @@ export default function Navbar() {
                                 {link.title}
                             </Link>
                         ))}
-                        <button 
-                            aria-label="Log out from ConsoleBlog mobile menu"
-                            className="bg-[#2e8b57] hover:bg-[#3ea876] text-white w-full py-2.5 rounded-[5px] mt-2 transition-colors duration-300 cursor-pointer"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Logout
-                        </button>
+                        {session.status === 'authenticated' ? 
+                        (
+                            <AuthButton 
+                                label="Logout"
+                                onClick={async () => await signOut({ callbackUrl: "/dashboard/login" })}
+                                className="bg-[#2e8b57] hover:bg-[#3ea876] text-white w-full py-2.5 rounded-[5px] mt-2 transition-colors duration-300 cursor-pointer"
+                            />
+                        )
+                        : (
+                            <Link href='/dashboard/login'>
+                                <AuthButton 
+                                    label="Login"
+                                    className="bg-[#2e8b57] hover:bg-[#3ea876] text-white w-full py-2.5 rounded-[5px] mt-2 transition-colors duration-300 cursor-pointer"
+                                />
+                            </Link>
+                        )
+                        }
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -129,3 +171,14 @@ export default function Navbar() {
     )
 }
 
+/*
+<button 
+                            aria-label="Log out from ConsoleBlog mobile menu"
+                            className="bg-[#2e8b57] hover:bg-[#3ea876] text-white w-full py-2.5 rounded-[5px] mt-2 transition-colors duration-300 cursor-pointer"
+                            onClick={async () => {
+                                await signOut({ callbackUrl: "/dashboard/login" });
+                            }}
+                        >
+                            Logout
+                        </button>
+*/

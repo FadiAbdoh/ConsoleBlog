@@ -1,6 +1,6 @@
 "use client"
 
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import Link from 'next/link';
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
@@ -11,8 +11,8 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import React, { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 // type StatusType = 'error' | 'success'
 type StatusType = {
@@ -23,8 +23,22 @@ type StatusType = {
 export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);    
-    const router = useRouter()
     const [status, setStatus] = useState<StatusType | null>(null)
+
+    const session = useSession();
+    const router = useRouter()
+    useEffect(() => {
+        if (session.status === "authenticated") {
+            router.push("/dashboard");
+        }
+    }, [session.status, router]);
+    if (session.status === "loading" || session.status === "authenticated") {
+        return (
+            <div className="flex min-h-[75vh] items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#2e8b57]"></div>
+            </div>
+        );
+    }
 
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -41,10 +55,8 @@ export default function LoginPage() {
             setStatus({type: 'error', message: 'Invalid Email or Password!'})
         } else {
             setStatus({ type: "success", message: "Logged in successfully! Redirecting..." });
-            setTimeout(() => {
-                router.push("/dashboard");
-                router.refresh();
-            }, 1500);
+            router.push("/dashboard");
+            router.refresh();
         }
     }
     return (

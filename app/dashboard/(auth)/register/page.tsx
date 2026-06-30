@@ -1,9 +1,8 @@
 "use client"
 
 import Link from 'next/link';
-import styles from './page.module.css'
 import TextField from "@mui/material/TextField";
-import { Suspense, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FormControl from "@mui/material/FormControl";
 import Alert from "@mui/material/Alert";
 import InputLabel from "@mui/material/InputLabel";
@@ -13,13 +12,27 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 export default function RegisterPage() {
     const [error, setError] = useState<string | null>(null);
-    const router = useRouter()
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const session = useSession();
+    const router = useRouter()
+    useEffect(() => {
+        if (session.status === "authenticated") {
+            router.push("/dashboard");
+        }
+    }, [session.status, router]);
+    if (session.status === "loading" || session.status === "authenticated") {
+        return (
+            <div className="flex min-h-[75vh] items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#2e8b57]"></div>
+            </div>
+        );
+    }
 
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault()

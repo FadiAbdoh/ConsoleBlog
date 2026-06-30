@@ -47,7 +47,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       //add new font
       // className={`${geistSans.variable} ${geistMono.variable} ${blackopsone.variable} h-full antialiased`}
-      
     >
       <body>
         <AuthProvider>

@@ -24,6 +24,7 @@ const postSchema = new Schema({
         type: String,
         required: true,
     },
+    
 })
 
 const Post = mongoose.models.Post || mongoose.model("Post", postSchema);
